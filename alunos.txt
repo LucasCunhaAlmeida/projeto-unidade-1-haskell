@@ -1,0 +1,1 @@
+Aluno {nomeAluno = "Lucas Cunha", dataNasAluno = "02-03-2003", serie = "1ano"}
