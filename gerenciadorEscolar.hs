@@ -44,9 +44,10 @@ data Professor = Professor {
 
 -- Criação do tipo algebrico Disciplina
 data Disciplina = Disciplina {
+    codigoDisc :: Int,
     nomeDisc :: String,
     cargaHoraria :: Int
-} deriving (Show, Eq)
+} deriving (Show, Eq, Read)
 
 -- Função para criar um professor
 cadProfessor :: IO ()
@@ -125,12 +126,14 @@ formatarProfessor :: Professor -> String
 formatarProfessor (Professor id nome dataNasc hora) =
     "Professor(a) " ++ "Id " ++ show id ++ " " ++ show nome ++ " " ++ show dataNasc ++ " " ++ show hora
 
---Função para escrever dados de disciplinas em um arquivo
-escreverDisc :: FilePath -> [Disciplina] -> IO ()
+
+-- Função para escrever uma lista de disciplinas
+escreverDisc :: FilePath -> Disciplina -> IO ()
 escreverDisc caminho disciplinas = do
     handle <- openFile caminho WriteMode
-    mapM_ (hPutStrLn handle . show) disciplinas
+    hPutStrLn handle (show disciplinas)
     hClose handle
+    putStrLn "Disciplina criada com sucesso!"
 
 
 -- Função para criar novos alunos e adicionar ao arquivo
@@ -187,3 +190,52 @@ formatarAluno:: Aluno -> String
 formatarAluno (Aluno nota1 nota2 nota3 nota4 nomeAluno dataNasAluno matricula serie) =
     "Aluno(a) " ++ " Nome " ++ show nomeAluno ++ " Data nascimento " ++ show dataNasAluno ++ " Matrícula " ++ show matricula ++ " Série " ++ show serie
     
+
+-- Função para cadastrar uma nova disciplina
+cadDisciplinas :: IO ()
+cadDisciplinas = do
+    putStrLn "Digite o codigo da disciplina:"
+    idStr <- getLine
+    putStrLn "Digite o nome da disciplina:"
+    nome <- getLine
+    putStrLn "Digite a carga horaria dessa disciplina:"
+    horariaStr <- getLine
+    let horaria = read horariaStr :: Int
+    let id = read idStr :: Int
+    escreverDisc "disciplinas.txt" (Disciplina id nome horaria)
+    putStrLn "Dados das disciplas salvas no arquivo disciplinas.txt"
+
+
+    -- Função para ler todas as disciplinas
+lerTodasDisciplinas :: IO ()
+lerTodasDisciplinas = do
+    conteudo <- readFile "disciplinas.txt"
+    let linhas = lines conteudo
+    let disciplinas = mapMaybe leituraSegura linhas
+    putStrLn "Disciplinas cadastradas:"
+    mapM_ (putStrLn . formatarDisciplinas) disciplinas
+
+
+-- Função para formatar a saida da String disciplina
+formatarDisciplinas :: Disciplina -> String
+formatarDisciplinas (Disciplina codigo nome carga) =
+    "- " ++ show codigo ++  " Disciplina de" ++ " " ++ nome ++ " - Carga horaria: " ++ show carga ++ " horas."
+
+
+-- Função para comparar o ID da disciplina
+compararId :: Int -> Disciplina -> Bool
+compararId idProcurado disc = diferente (codigoDisc disc) idProcurado
+
+
+--Função para remover uma disciplina
+removerDisciplinas :: Int -> IO ()
+removerDisciplinas idProcurado = do
+    conteudo <- readFile "disciplinas.txt"
+    let linhas = lines conteudo
+    let disciplinas = mapMaybe leituraSegura linhas
+    let disciplinasAtt = filtrar (compararId idProcurado) disciplinas
+    if tamanho disciplinas == tamanho disciplinasAtt
+        then putStrLn "Nenhuma disciplina encontrada com esse ID para remover."
+        else do
+            writeFile "disciplinas.txt" (unlines (map show disciplinasAtt))
+            putStrLn "Disciplina removida com sucesso!!"

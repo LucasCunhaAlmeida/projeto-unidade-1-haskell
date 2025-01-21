@@ -1,0 +1,1 @@
+Disciplina {codigoDisc = 1, nomeDisc = "Linguaguens de Programacao", cargaHoraria = 90}
