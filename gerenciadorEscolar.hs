@@ -222,9 +222,8 @@ inserirNotas = do
             writeFile "alunos.txt" (unlines (map show alunosAtualizados))
             putStrLn "Notas atualizadas com sucesso!"
 
--- Função para calcular a média das notas de um aluno usando a matrícula
-calcularMedia :: IO ()
-calcularMedia = do
+calcularMediaAluno :: IO ()
+calcularMediaAluno = do
     putStrLn "Digite a matrícula do aluno para calcular a média:"
     matriculaStr <- getLine
     let procurarMatricula = read matriculaStr :: Int
@@ -236,7 +235,33 @@ calcularMedia = do
         Nothing -> putStrLn "Nenhum aluno encontrado com essa matrícula."
         Just aluno -> do
             let media = (nota1 aluno + nota2 aluno + nota3 aluno + nota4 aluno) / 4
-            putStrLn $ "A média do aluno " ++ nomeAluno aluno ++ " é: " ++ show media
+            let resultado = "Matrícula: " ++ show (matricula aluno) ++ 
+                            ", Nome: " ++ nomeAluno aluno ++ 
+                            ", Média: " ++ show media ++ "\n"
+            -- Adiciona o resultado no arquivo "media.txt"
+            appendFile "media.txt" resultado
+            putStrLn $ "A média do aluno " ++ nomeAluno aluno ++ " foi salva no arquivo media.txt."
+
+listarAprovadosReprovados :: IO ()
+listarAprovadosReprovados = do
+    -- Lê o conteúdo do arquivo com as médias
+    conteudo <- readFile "media.txt"
+    let linhas = lines conteudo
+    -- Divide entre aprovados e reprovados com base na média
+    let aprovados = filter (\linha -> extrairMedia linha >= 5.0) linhas
+    let reprovados = filter (\linha -> extrairMedia linha < 5.0) linhas
+    -- Exibe os resultados
+    putStrLn "Alunos Aprovados:"
+    mapM_ putStrLn aprovados
+    putStrLn "\nAlunos Reprovados:"
+    mapM_ putStrLn reprovados
+  where
+    extrairMedia :: String -> Double
+    extrairMedia linha =
+        let partes = words linha
+            mediaStr = last partes -- A média é o último valor da linha
+        in read mediaStr :: Double
+
 
 -- Função para cadastrar uma nova disciplina
 cadDisciplinas :: IO ()
