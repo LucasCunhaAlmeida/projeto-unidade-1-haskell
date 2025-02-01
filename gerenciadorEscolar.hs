@@ -189,7 +189,79 @@ lerTodosAlunos = do
 formatarAluno:: Aluno -> String
 formatarAluno (Aluno nota1 nota2 nota3 nota4 nomeAluno dataNasAluno matricula serie) =
     "Aluno(a) " ++ " Nome " ++ show nomeAluno ++ " Data nascimento " ++ show dataNasAluno ++ " Matrícula " ++ show matricula ++ " Série " ++ show serie
-    
+
+-- Função para inserir notas de um aluno
+-- Sujeito a mudança ainda
+inserirNotas :: IO ()
+inserirNotas = do
+    putStrLn "Digite a matrícula do aluno para inserir as notas:"
+    matriculaStr <- getLine
+    let procurarMatricula = read matriculaStr :: Int
+    conteudo <- readFile "alunos.txt"
+    let linhas = lines conteudo
+    let alunos = mapMaybe leituraSegura linhas
+    let alunoEncontrado = find (\aluno -> matricula aluno == procurarMatricula) alunos
+    case alunoEncontrado of
+        Nothing -> putStrLn "Nenhum aluno encontrado com essa matrícula."
+        Just aluno -> do
+            putStrLn "Digite a primeira nota:"
+            nota1Str <- getLine
+            putStrLn "Digite a segunda nota:"
+            nota2Str <- getLine
+            putStrLn "Digite a terceira nota:"
+            nota3Str <- getLine
+            putStrLn "Digite a quarta nota:"
+            nota4Str <- getLine
+            let notasAtualizadas = aluno {
+                nota1 = read nota1Str :: Float,
+                nota2 = read nota2Str :: Float,
+                nota3 = read nota3Str :: Float,
+                nota4 = read nota4Str :: Float
+            }
+            let alunosAtualizados = map (\a -> if matricula a == procurarMatricula then notasAtualizadas else a) alunos
+            writeFile "alunos.txt" (unlines (map show alunosAtualizados))
+            putStrLn "Notas atualizadas com sucesso!"
+
+calcularMediaAluno :: IO ()
+calcularMediaAluno = do
+    putStrLn "Digite a matrícula do aluno para calcular a média:"
+    matriculaStr <- getLine
+    let procurarMatricula = read matriculaStr :: Int
+    conteudo <- readFile "alunos.txt"
+    let linhas = lines conteudo
+    let alunos = mapMaybe leituraSegura linhas
+    let alunoEncontrado = find (\aluno -> matricula aluno == procurarMatricula) alunos
+    case alunoEncontrado of
+        Nothing -> putStrLn "Nenhum aluno encontrado com essa matrícula."
+        Just aluno -> do
+            let media = (nota1 aluno + nota2 aluno + nota3 aluno + nota4 aluno) / 4
+            let resultado = "Matrícula: " ++ show (matricula aluno) ++ 
+                            ", Nome: " ++ nomeAluno aluno ++ 
+                            ", Média: " ++ show media ++ "\n"
+            -- Adiciona o resultado no arquivo "media.txt"
+            appendFile "media.txt" resultado
+            putStrLn $ "A média do aluno " ++ nomeAluno aluno ++ " foi salva no arquivo media.txt."
+
+listarAprovadosReprovados :: IO ()
+listarAprovadosReprovados = do
+    -- Lê o conteúdo do arquivo com as médias
+    conteudo <- readFile "media.txt"
+    let linhas = lines conteudo
+    -- Divide entre aprovados e reprovados com base na média
+    let aprovados = filter (\linha -> extrairMedia linha >= 5.0) linhas
+    let reprovados = filter (\linha -> extrairMedia linha < 5.0) linhas
+    -- Exibe os resultados
+    putStrLn "Alunos Aprovados:"
+    mapM_ putStrLn aprovados
+    putStrLn "\nAlunos Reprovados:"
+    mapM_ putStrLn reprovados
+  where
+    extrairMedia :: String -> Double
+    extrairMedia linha =
+        let partes = words linha
+            mediaStr = last partes -- A média é o último valor da linha
+        in read mediaStr :: Double
+
 
 -- Função para cadastrar uma nova disciplina
 cadDisciplinas :: IO ()
