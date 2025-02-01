@@ -1,1 +1,8 @@
-Professor {idProf = 1, nomeProf = "Teste", dataNasProf = "1 4 1990", hora = 800}
+Professor {idProf = 3, nomeProf = "Antonio", dataNasProf = "2 6 1990", hora = 90}
+Professor {idProf = 4, nomeProf = "Ana", dataNasProf = "20 8 1985", hora = 60}
+Professor {idProf = 5, nomeProf = "Pedro", dataNasProf = "5 12 1982", hora = 70}
+Professor {idProf = 7, nomeProf = "Rafael", dataNasProf = "30 1 1983", hora = 55}
+Professor {idProf = 8, nomeProf = "Beatriz", dataNasProf = "12 4 1987", hora = 65}
+Professor {idProf = 9, nomeProf = "Gustavo", dataNasProf = "18 9 1979", hora = 75}
+Professor {idProf = 10, nomeProf = "Fernanda", dataNasProf = "22 11 1981", hora = 85}
+Professor {idProf = 2, nomeProf = "Marcelo", dataNasProf = "4 12 1990", hora = 75}

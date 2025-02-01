@@ -1,2 +1,1 @@
-Disciplina {codigoDisc = 90, nomeDisc = "Libras", cargaHoraria = 90}
-Disciplina {codigoDisc = 3, nomeDisc = "P3", cargaHoraria = 90}
+Disciplina {codigoDisc = 3, nomeDisc = "Portugues", cargaHoraria = 300}

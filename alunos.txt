@@ -1,10 +1,3 @@
-Aluno {nota1 = 5.0, nota2 = 6.0, nota3 = 7.0, nota4 = 8.0, nomeAluno = "Lucas", dataNasAluno = "2 3 2008", matricula = 1, serie = "2 ano"}
-Aluno {nota1 = 4.0, nota2 = 5.5, nota3 = 6.0, nota4 = 7.0, nomeAluno = "Maria", dataNasAluno = "15 5 2007", matricula = 2, serie = "3 ano"}
-Aluno {nota1 = 8.0, nota2 = 7.5, nota3 = 9.0, nota4 = 8.5, nomeAluno = "João", dataNasAluno = "10 10 2006", matricula = 3, serie = "4 ano"}
-Aluno {nota1 = 6.0, nota2 = 6.5, nota3 = 7.0, nota4 = 7.5, nomeAluno = "Ana", dataNasAluno = "20 8 2008", matricula = 4, serie = "2 ano"}
-Aluno {nota1 = 9.0, nota2 = 8.5, nota3 = 9.5, nota4 = 9.0, nomeAluno = "Pedro", dataNasAluno = "5 12 2007", matricula = 5, serie = "3 ano"}
-Aluno {nota1 = 3.0, nota2 = 4.0, nota3 = 5.0, nota4 = 4.5, nomeAluno = "Carla", dataNasAluno = "25 7 2006", matricula = 6, serie = "4 ano"}
-Aluno {nota1 = 7.0, nota2 = 7.5, nota3 = 8.0, nota4 = 8.5, nomeAluno = "Rafael", dataNasAluno = "30 1 2008", matricula = 7, serie = "2 ano"}
-Aluno {nota1 = 6.0, nota2 = 6.5, nota3 = 7.0, nota4 = 7.5, nomeAluno = "Beatriz", dataNasAluno = "12 4 2007", matricula = 8, serie = "3 ano"}
 Aluno {nota1 = 8.0, nota2 = 8.5, nota3 = 9.0, nota4 = 9.5, nomeAluno = "Gustavo", dataNasAluno = "18 9 2006", matricula = 9, serie = "4 ano"}
-Aluno {nota1 = 5.5, nota2 = 6.0, nota3 = 6.5, nota4 = 7.0, nomeAluno = "Fernanda", dataNasAluno = "22 11 2008", matricula = 10, serie = "2 ano"}
+Aluno {nota1 = 2.0, nota2 = 3.0, nota3 = 4.0, nota4 = 5.0, nomeAluno = "Paulo", dataNasAluno = "1 2 2002", matricula = 2, serie = "3 ano"}
+Aluno {nota1 = 1.0, nota2 = 6.0, nota3 = 7.0, nota4 = 8.0, nomeAluno = "Luisa", dataNasAluno = "3 4 2004", matricula = 8, serie = "3 ano"}

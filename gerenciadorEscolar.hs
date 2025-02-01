@@ -3,6 +3,7 @@
 -- Remover Aluno
 -- Listar Alunos
 
+-- (Parte de Natan)
 -- Inserir notas, fazer media e listar alunos aprovados e reprovados
 
 -- (Parte de Gabriel)
@@ -16,7 +17,10 @@
 -- Remover professor
 
 -- Projeto da unidade 1 de Linguagens de programação
--- Autores: Lucas Cunha, Lorena Pereira, Gabriel Silveira
+-- Autores: Lucas Cunha, Lorena Pereira, Gabriel Silveira, Natan Vinicius
+
+-- gerenciadorEscolar.hs
+module GerenciadorEscolar where
 import System.IO
 import Data.List (find)
 import Data.Maybe (mapMaybe)
@@ -92,6 +96,7 @@ lerTodosProfessores = do
     putStrLn "Professores cadastrados:"
     mapM_ (putStrLn . formatarProfessor) professores
 
+-- Arquivo trancado
 --Função para remover um professor
 removerProfessor :: Int -> IO ()
 removerProfessor idProcurado = do
@@ -238,14 +243,6 @@ formatarAluno (Aluno nota1 nota2 nota3 nota4 nomeAluno dataNasAluno matricula se
 -- Função auxiliar para comparar a matrícula do aluno
 comparaMatricula :: Int -> Aluno -> Bool
 comparaMatricula procurarMatricula aluno = matricula aluno == procurarMatricula
-
--- Função auxiliar para calcular a média de um aluno
-calcularMediaAluno :: Aluno -> String
-calcularMediaAluno aluno =
-    let media = (nota1 aluno + nota2 aluno + nota3 aluno + nota4 aluno) / 4
-    in "Matrícula: " ++ show (matricula aluno) ++ 
-       ", Nome: " ++ nomeAluno aluno ++ 
-       ", Média: " ++ show media
        
 listarAprovadosReprovados :: IO ()
 listarAprovadosReprovados = do

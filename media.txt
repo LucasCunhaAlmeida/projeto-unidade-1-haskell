@@ -1,10 +1,3 @@
-Matr°cula: 1, Nome: Lucas, MÇdia: 6.5
-Matr°cula: 2, Nome: Maria, MÇdia: 5.625
-Matr°cula: 3, Nome: Jo√£o, MÇdia: 8.25
-Matr°cula: 4, Nome: Ana, MÇdia: 6.75
-Matr°cula: 5, Nome: Pedro, MÇdia: 9.0
-Matr°cula: 6, Nome: Carla, MÇdia: 4.125
-Matr°cula: 7, Nome: Rafael, MÇdia: 7.75
-Matr°cula: 8, Nome: Beatriz, MÇdia: 6.75
 Matr°cula: 9, Nome: Gustavo, MÇdia: 8.75
-Matr°cula: 10, Nome: Fernanda, MÇdia: 6.25
+Matr°cula: 2, Nome: Paulo, MÇdia: 3.5
+Matr°cula: 8, Nome: Luisa, MÇdia: 5.5
