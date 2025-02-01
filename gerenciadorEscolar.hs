@@ -140,7 +140,7 @@ escreverProf caminho professor = do
 
 formatarProfessor :: Professor -> String
 formatarProfessor (Professor id nome dataNasc hora) =
-    "Professor(a) " ++ "Id " ++ show id ++ " " ++ show nome ++ " " ++ show dataNasc ++ " " ++ show hora
+    "Professor(a) " ++ "Id: " ++ show id ++ " Nome: " ++ show nome ++ " Data Nas: " ++ show dataNasc ++ " Horas " ++ show hora
 
 
 -- Função para escrever uma lista de disciplinas
@@ -166,6 +166,7 @@ matriculaAlunoExiste matriculaAluno (aluno:alunos)
     | matricula aluno == matriculaAluno = True
     | otherwise = matriculaAlunoExiste matriculaAluno alunos
 
+-- Função para cadastrar um novo aluno
 -- Função para cadastrar um novo aluno
 cadAluno :: IO ()
 cadAluno = do
@@ -205,7 +206,6 @@ cadAluno = do
             putStrLn "Dados do aluno salvos no arquivo alunos.txt"
 
 
-
 --Função para remover um Aluno
 removerAluno :: Int -> IO ()
 removerAluno idProcurado = do
@@ -233,15 +233,20 @@ lerTodosAlunos = do
 
 formatarAluno:: Aluno -> String
 formatarAluno (Aluno nota1 nota2 nota3 nota4 nomeAluno dataNasAluno matricula serie) =
-    "Aluno(a) " ++ " Nome " ++ show nomeAluno ++ " Data nascimento " ++ show dataNasAluno ++ " Matrícula " ++ show matricula ++ " Série " ++ show serie
-
-
-
+    "Aluno(a) " ++ " Nome: " ++ show nomeAluno ++ " Data nascimento: " ++ show dataNasAluno ++ " Matrícula: " ++ show matricula ++ " Série: " ++ show serie
 
 -- Função auxiliar para comparar a matrícula do aluno
 comparaMatricula :: Int -> Aluno -> Bool
 comparaMatricula procurarMatricula aluno = matricula aluno == procurarMatricula
 
+-- Função auxiliar para calcular a média de um aluno
+calcularMediaAluno :: Aluno -> String
+calcularMediaAluno aluno =
+    let media = (nota1 aluno + nota2 aluno + nota3 aluno + nota4 aluno) / 4
+    in "Matrícula: " ++ show (matricula aluno) ++ 
+       ", Nome: " ++ nomeAluno aluno ++ 
+       ", Média: " ++ show media
+       
 listarAprovadosReprovados :: IO ()
 listarAprovadosReprovados = do
     -- Lê o conteúdo do arquivo com as médias
@@ -337,7 +342,3 @@ calcularMediaAluno aluno =
     in "Matrícula: " ++ show (matricula aluno) ++ 
        ", Nome: " ++ nomeAluno aluno ++ 
        ", Média: " ++ show media
-
-
-
-

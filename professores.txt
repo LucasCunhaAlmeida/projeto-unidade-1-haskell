@@ -1,0 +1,1 @@
+Professor {idProf = 1, nomeProf = "Teste", dataNasProf = "1 4 1990", hora = 800}
