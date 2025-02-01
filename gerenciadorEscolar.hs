@@ -12,7 +12,6 @@
 
 -- (Parte de Lorena)
 -- Cadastrar professor
--- Fazer media salarial dos professores (horas * valor da hora)
 -- Listar professores
 -- Remover professor
 
@@ -49,23 +48,40 @@ data Disciplina = Disciplina {
     cargaHoraria :: Int
 } deriving (Show, Eq, Read)
 
+
+-- Função auxiliar para verificar se o ID do professor já existe
+idProfessorExiste :: Int -> [Professor] -> Bool
+idProfessorExiste id [] = False
+idProfessorExiste id (prof:profs)
+    | idProf prof == id = True
+    | otherwise = idProfessorExiste id profs
+
 -- Função para criar um professor
 cadProfessor :: IO ()
 cadProfessor = do --O bloco "do" é usado para encadear uma sequência de ações de IO.
     putStrLn "Digite o ID do professor:"
     idStr <- getLine
-    putStrLn "Digite o nome do professor:"
-    nome <- getLine
-    putStrLn "Digite a data de nascimento do professor:"
-    dataNasc <- getLine
-    putStrLn "Digite as horas do professor:"
-    horaStr <- getLine
-    let hora = read horaStr :: Int -- criação de uma variável local hora que recebe o valor de horaStr convertido para inteiro
-    let id = read idStr :: Int -- criação de uma variável local id que recebe o valor de idStr convertido para inteiro
-    --let professor = Professor nome dataNasc salario -- criação de um professor com os dados informados
-    escreverProf "professores.txt" (Professor id nome dataNasc hora) -- chamada da função escreverProf para salvar os dados do professor no arquivo professores.txt
-    --writeFile "professores.txt" (show professor)
-    putStrLn "Dados do professor salvos no arquivo professor.txt"
+    let id = read idStr :: Int
+
+    -- Ler o conteúdo do arquivo de professores
+    conteudo <- readFile "professores.txt"
+    let linhas = lines conteudo
+    let professores = mapMaybe leituraSegura linhas
+
+    -- Verificar se o ID já existe
+    if idProfessorExiste id professores
+        then putStrLn "Já existe um professor com esse ID."
+    else do
+        putStrLn "Digite o nome do professor:"
+        nome <- getLine
+        putStrLn "Digite a data de nascimento do professor:"
+        dataNasc <- getLine
+        putStrLn "Digite as horas do professor:"
+        horaStr <- getLine
+        let hora = read horaStr :: Int
+        let professor = Professor id nome dataNasc hora
+        escreverProf "professores.txt" professor
+        putStrLn "Dados do professor salvos no arquivo professores.txt"
 
 -- Função para ler todos os professores
 lerTodosProfessores :: IO ()
@@ -143,22 +159,51 @@ escreverAluno caminho novoAluno = do
     hPutStrLn handle (show novoAluno)
     hClose handle
     putStrLn "Aluno criado com sucesso!"
+-- Função auxiliar para verificar se a matrícula do aluno já existe
+matriculaAlunoExiste :: Int -> [Aluno] -> Bool
+matriculaAlunoExiste matricula [] = False
+matriculaAlunoExiste matriculaAluno (aluno:alunos)
+    | matricula aluno == matriculaAluno = True
+    | otherwise = matriculaAlunoExiste matriculaAluno alunos
 
 -- Função para cadastrar um novo aluno
 cadAluno :: IO ()
 cadAluno = do
-    putStrLn "Digite o nome do aluno:"
-    nome <- getLine
-    putStrLn "Digite a data de nascimento do aluno:"
-    dataNasc <- getLine
     putStrLn "Digite a matrícula do aluno:"
     matriculaStr <- getLine
-    putStrLn "Digite a série do aluno:"
-    serie <- getLine
     let matricula = read matriculaStr :: Int
-    let aluno = Aluno 0 0 0 0 nome dataNasc matricula serie
-    escreverAluno "alunos.txt" aluno
-    putStrLn "Dados do aluno salvos no arquivo alunos.txt"
+    
+    -- Ler o conteúdo do arquivo de alunos
+    conteudo <- readFile "alunos.txt"
+    let linhas = lines conteudo
+    let alunos = mapMaybe leituraSegura linhas
+    
+    -- Verificar se a matrícula já existe
+    if matriculaAlunoExiste matricula alunos
+        then putStrLn "Já existe um aluno com essa matrícula."
+        else do
+            putStrLn "Digite o nome do aluno:"
+            nome <- getLine
+            putStrLn "Digite a data de nascimento do aluno:"
+            dataNasc <- getLine
+            putStrLn "Digite a série do aluno:"
+            serie <- getLine
+            putStrLn "Digite a nota 1 do aluno:"
+            nota1Str <- getLine
+            let nota1 = read nota1Str :: Float
+            putStrLn "Digite a nota 2 do aluno:"
+            nota2Str <- getLine
+            let nota2 = read nota2Str :: Float
+            putStrLn "Digite a nota 3 do aluno:"
+            nota3Str <- getLine
+            let nota3 = read nota3Str :: Float
+            putStrLn "Digite a nota 4 do aluno:"
+            nota4Str <- getLine
+            let nota4 = read nota4Str :: Float
+            let aluno = Aluno nota1 nota2 nota3 nota4 nome dataNasc matricula serie
+            escreverAluno "alunos.txt" aluno
+            putStrLn "Dados do aluno salvos no arquivo alunos.txt"
+
 
 
 --Função para remover um Aluno
@@ -190,57 +235,12 @@ formatarAluno:: Aluno -> String
 formatarAluno (Aluno nota1 nota2 nota3 nota4 nomeAluno dataNasAluno matricula serie) =
     "Aluno(a) " ++ " Nome " ++ show nomeAluno ++ " Data nascimento " ++ show dataNasAluno ++ " Matrícula " ++ show matricula ++ " Série " ++ show serie
 
--- Função para inserir notas de um aluno
--- Sujeito a mudança ainda
-inserirNotas :: IO ()
-inserirNotas = do
-    putStrLn "Digite a matrícula do aluno para inserir as notas:"
-    matriculaStr <- getLine
-    let procurarMatricula = read matriculaStr :: Int
-    conteudo <- readFile "alunos.txt"
-    let linhas = lines conteudo
-    let alunos = mapMaybe leituraSegura linhas
-    let alunoEncontrado = find (\aluno -> matricula aluno == procurarMatricula) alunos
-    case alunoEncontrado of
-        Nothing -> putStrLn "Nenhum aluno encontrado com essa matrícula."
-        Just aluno -> do
-            putStrLn "Digite a primeira nota:"
-            nota1Str <- getLine
-            putStrLn "Digite a segunda nota:"
-            nota2Str <- getLine
-            putStrLn "Digite a terceira nota:"
-            nota3Str <- getLine
-            putStrLn "Digite a quarta nota:"
-            nota4Str <- getLine
-            let notasAtualizadas = aluno {
-                nota1 = read nota1Str :: Float,
-                nota2 = read nota2Str :: Float,
-                nota3 = read nota3Str :: Float,
-                nota4 = read nota4Str :: Float
-            }
-            let alunosAtualizados = map (\a -> if matricula a == procurarMatricula then notasAtualizadas else a) alunos
-            writeFile "alunos.txt" (unlines (map show alunosAtualizados))
-            putStrLn "Notas atualizadas com sucesso!"
 
-calcularMediaAluno :: IO ()
-calcularMediaAluno = do
-    putStrLn "Digite a matrícula do aluno para calcular a média:"
-    matriculaStr <- getLine
-    let procurarMatricula = read matriculaStr :: Int
-    conteudo <- readFile "alunos.txt"
-    let linhas = lines conteudo
-    let alunos = mapMaybe leituraSegura linhas
-    let alunoEncontrado = find (\aluno -> matricula aluno == procurarMatricula) alunos
-    case alunoEncontrado of
-        Nothing -> putStrLn "Nenhum aluno encontrado com essa matrícula."
-        Just aluno -> do
-            let media = (nota1 aluno + nota2 aluno + nota3 aluno + nota4 aluno) / 4
-            let resultado = "Matrícula: " ++ show (matricula aluno) ++ 
-                            ", Nome: " ++ nomeAluno aluno ++ 
-                            ", Média: " ++ show media ++ "\n"
-            -- Adiciona o resultado no arquivo "media.txt"
-            appendFile "media.txt" resultado
-            putStrLn $ "A média do aluno " ++ nomeAluno aluno ++ " foi salva no arquivo media.txt."
+
+
+-- Função auxiliar para comparar a matrícula do aluno
+comparaMatricula :: Int -> Aluno -> Bool
+comparaMatricula procurarMatricula aluno = matricula aluno == procurarMatricula
 
 listarAprovadosReprovados :: IO ()
 listarAprovadosReprovados = do
@@ -248,20 +248,28 @@ listarAprovadosReprovados = do
     conteudo <- readFile "media.txt"
     let linhas = lines conteudo
     -- Divide entre aprovados e reprovados com base na média
-    let aprovados = filter (\linha -> extrairMedia linha >= 5.0) linhas
-    let reprovados = filter (\linha -> extrairMedia linha < 5.0) linhas
+    let aprovados = filter alunoAprovado linhas
+    let reprovados = filter alunoReprovado linhas
     -- Exibe os resultados
     putStrLn "Alunos Aprovados:"
     mapM_ putStrLn aprovados
     putStrLn "\nAlunos Reprovados:"
     mapM_ putStrLn reprovados
-  where
-    extrairMedia :: String -> Double
-    extrairMedia linha =
-        let partes = words linha
-            mediaStr = last partes -- A média é o último valor da linha
-        in read mediaStr :: Double
 
+-- Função auxiliar para verificar se o aluno está aprovado
+alunoAprovado :: String -> Bool
+alunoAprovado linha = extrairMedia linha >= 5.0
+
+-- Função auxiliar para verificar se o aluno está reprovado
+alunoReprovado :: String -> Bool
+alunoReprovado linha = extrairMedia linha < 5.0
+
+-- Função auxiliar para extrair a média de uma linha
+extrairMedia :: String -> Double
+extrairMedia linha =
+    let partes = words linha
+        mediaStr = last partes -- A média é o último valor da linha
+    in read mediaStr :: Double
 
 -- Função para cadastrar uma nova disciplina
 cadDisciplinas :: IO ()
@@ -311,3 +319,25 @@ removerDisciplinas idProcurado = do
         else do
             writeFile "disciplinas.txt" (unlines (map show disciplinasAtt))
             putStrLn "Disciplina removida com sucesso!!"
+
+-- Função para calcular a média de todos os alunos
+calcularMediaTodosAlunos :: IO ()
+calcularMediaTodosAlunos = do
+    conteudo <- readFile "alunos.txt"
+    let linhas = lines conteudo
+    let alunos = mapMaybe leituraSegura linhas
+    let resultados = map calcularMediaAluno alunos
+    writeFile "media.txt" (unlines resultados)
+    putStrLn "Médias de todos os alunos foram salvas no arquivo media.txt."
+
+-- Função auxiliar para calcular a média de um aluno
+calcularMediaAluno :: Aluno -> String
+calcularMediaAluno aluno =
+    let media = (nota1 aluno + nota2 aluno + nota3 aluno + nota4 aluno) / 4
+    in "Matrícula: " ++ show (matricula aluno) ++ 
+       ", Nome: " ++ nomeAluno aluno ++ 
+       ", Média: " ++ show media
+
+
+
+
